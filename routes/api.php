@@ -1,0 +1,62 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommunityServiceController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ViolationCategoriesController;
+use App\Http\Controllers\ViolationListController;
+use App\Http\Controllers\ViolatorController;
+use App\Http\Controllers\CitationController;
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/change-password', [AuthController::class, 'changePassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.email');
+
+Route::get('/user', [UserController::class, 'index']);
+Route::post('/create-user', [UserController::class, 'store']);
+Route::post('/view-user/{id}', [UserController::class, 'show']);
+Route::put('/update-user/{id}', [UserController::class, 'update']);
+Route::post('/delete-user/{id}', [UserController::class, 'destroy']);
+
+Route::get('/category', [ViolationCategoriesController::class, 'index']);
+Route::post('/create-category', [ViolationCategoriesController::class, 'store']);
+Route::post('/view-category/{id}', [ViolationCategoriesController::class, 'show']);
+Route::put('/update-category/{id}', [ViolationCategoriesController::class, 'update']);
+Route::post('/delete-category/{id}', [ViolationCategoriesController::class, 'destroy']);
+
+Route::get('/violation', [ViolationListController::class, 'index']);
+Route::post('/violation/{id}', [ViolationListController::class, 'getByCategory']);
+Route::post('/create-violation', [ViolationListController::class, 'store']);
+Route::post('/view-violation/{id}', [ViolationListController::class, 'show']);
+Route::put('/update-violation/{id}', [ViolationListController::class, 'update']);
+Route::post('/delete-violation/{id}', [ViolationListController::class, 'destroy']);
+
+Route::get('/violator', [ViolatorController::class, 'index']);
+Route::post('/create-violator', [ViolatorController::class, 'store']);
+Route::post('/view-violator/{id}', [ViolatorController::class, 'show']);
+Route::put('/update-violator/{id}', [ViolatorController::class, 'update']);
+Route::post('/delete-violator/{id}', [ViolatorController::class, 'destroy']);
+
+Route::get('/citation', [CitationController::class, 'index']);
+Route::post('/create-citation', [CitationController::class, 'store']);
+Route::post('/view-citation/{id}', [CitationController::class, 'show']);
+Route::put('/update-citation/{id}', [CitationController::class, 'update']);
+Route::post('/delete-citation/{id}', [CitationController::class, 'destroy']);
