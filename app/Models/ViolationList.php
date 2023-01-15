@@ -10,6 +10,7 @@ class ViolationList extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'violation_name',
         'penalty',
         'violation_categories_id',

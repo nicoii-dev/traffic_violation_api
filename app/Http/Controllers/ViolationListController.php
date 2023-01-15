@@ -34,7 +34,7 @@ class ViolationListController extends Controller
     {
         $request->validate([
             'violation_categories_id' => 'required',
-            'violation_name' => 'required',
+            'violation_name' => 'required|unique:violation_lists,violation_name',
             'penalty' => 'required',
         ]);
 
@@ -70,7 +70,7 @@ class ViolationListController extends Controller
     {
         $request->validate([
             'violation_categories_id' => 'required',
-            'violation_name' => 'required',
+            'violation_name' => 'required|unique:violation_lists,violation_name',
             'penalty' => 'required',
         ]);
 

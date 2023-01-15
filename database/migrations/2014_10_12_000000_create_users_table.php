@@ -25,6 +25,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('role');
+            $table->string('status');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -38,9 +39,10 @@ return new class extends Migration
                 'gender' => 'admin',
                 'phone_number' => '09751234567',
                 'dob' => 'admin',
+                'role' => 'ADMIN',
+                'status' => '1',
                 'email' => 'admin@domain.com',
                 'password' => bcrypt('recordsadmin'),
-                'role' => 'ADMIN',
             )
         );
     }

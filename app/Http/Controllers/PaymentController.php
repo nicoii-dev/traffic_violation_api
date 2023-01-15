@@ -15,7 +15,8 @@ class PaymentController extends Controller
     public function index()
     {
         // return PaymentRecord::all();
-        return PaymentRecord::with('citation')->get();
+        $data = PaymentRecord::with('invoice', 'invoice.violator')->get();
+        return $data;
     }
 
     /**
@@ -27,19 +28,24 @@ class PaymentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'driver_id' => 'required',
-            'citation_id' => 'required',
+            'invoice_id' => 'required',
             'discount' => 'required',
+            'received_date' => 'required',
+            'payment_method' => 'required',
             'total_amount' => 'required',
             'total_paid' => 'required',
+            'remarks' => 'required',
         ]);
 
         PaymentRecord::create([
-            'driver_id' => $request['driver_id'],
-            'citation_id' => $request['citation_id'],
+            'invoice_id' => $request['invoice_id'],
+            'community_service_id' => $request['community_service_id'],
             'discount' => $request['discount'],
+            'received_date' => $request['received_date'],
+            'payment_method' => $request['payment_method'],
             'total_amount' => $request['total_amount'],
             'total_paid' => $request['total_paid'],
+            'remarks' => $request['remarks'],
         ]);
         $payment = DB::table('payment_records')->get();
         return response()->json($payment, 200);
@@ -67,19 +73,25 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'driver_id' => 'required',
-            'citation_id' => 'required',
+            'invoice_id' => 'required',
+            'community_service_id' => 'required',
             'discount' => 'required',
+            'received_date' => 'required',
+            'payment_method' => 'required',
             'total_amount' => 'required',
             'total_paid' => 'required',
+            'remarks' => 'required',
         ]);
 
         PaymentRecord::where('id', $id)->update([
-            'driver_id' => $request['driver_id'],
-            'citation_id' => $request['citation_id'],
+            'invoice_id' => $request['invoice_id'],
+            'community_service_id' => $request['community_service_id'],
             'discount' => $request['discount'],
+            'received_date' => $request['received_date'],
+            'payment_method' => $request['payment_method'],
             'total_amount' => $request['total_amount'],
             'total_paid' => $request['total_paid'],
+            'remarks' => $request['remarks'],
         ]);
         $payment = PaymentRecord::find($id);
         return response()->json($payment, 200);

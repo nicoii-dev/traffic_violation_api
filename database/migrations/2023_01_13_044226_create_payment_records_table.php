@@ -15,10 +15,13 @@ return new class extends Migration
     {
         Schema::create('payment_records', function (Blueprint $table) {
             $table->id();
-            $table->string('citation_id');
-            $table->string('discount');
+            $table->string('invoice_id');
+            $table->string('discount')->nullable();
+            $table->date('received_date');
+            $table->string('payment_method');
             $table->string('total_amount');
             $table->string('total_paid');
+            $table->string('remarks');
             $table->timestamps();
         });
     }

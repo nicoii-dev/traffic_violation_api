@@ -1,19 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\PaymentRecord;
-class CitationController extends Controller
+use App\Models\CommunityServiceDetails;
+
+class CommunityServiceDetailsController extends Controller
 {
-
-    public function getViolations(Request $request)
-    {
-        $ids = $request['violation_ids'];
-        return DB::table('violation_lists')->whereIn('id', $ids)
-        ->get();
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +14,7 @@ class CitationController extends Controller
      */
     public function index()
     {
-        return DB::table('violation_lists')->whereIn('id', $ids)
-        ->whereNotIn('id', $not_ids)
-        ->where('status', 1)
-        ->get();
+        return CommunityServiceDetails::all();
     }
 
     /**
@@ -46,7 +36,8 @@ class CitationController extends Controller
      */
     public function show($id)
     {
-        //
+        $service = CommunityServiceDetails::find($id);
+        return response()->json($service, 200);
     }
 
     /**
@@ -58,7 +49,18 @@ class CitationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'service_name' => 'required',
+            'discount' => 'required'
+        ]);
+
+        CommunityServiceDetails::where('id', $id)->update([
+            'service_name' => $request['service_name'],
+            'discount' => $request['discount'],
+        ]);
+
+        $community = DB::table('community_service_details')->get();
+        return response()->json($community, 200);
     }
 
     /**

@@ -32,9 +32,9 @@ class UserController extends Controller
             'gender' => 'required',
             'phone_number' => 'required',
             'dob' => 'required',
+            'role' => 'required',
             'email' => 'required|string|unique:users,email',
             'password' => 'required',
-            'role' => 'required',
         ]);
 
         $user = User::create([
@@ -44,9 +44,10 @@ class UserController extends Controller
             'gender' => $request['gender'],
             'phone_number' => $request['phone_number'],
             'dob' => $request['dob'],
+            'role' => $request['role'],
+            'status' => 1,
             'email' => $request['email'],
             'password' => bcrypt($request['password']),
-            'role' => $request['role'],
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
@@ -85,19 +86,8 @@ class UserController extends Controller
             'gender' => 'required',
             'phone_number' => 'required',
             'dob' => 'required',
-            'email' => 'required|string|unique:users,email',
             'role' => 'required',
-        ]);
-
-        $user = User::create([
-            'first_name' => $request['first_name'],
-            'middle_name' => $request['middle_name'],
-            'last_name' => $request['last_name'],
-            'gender' => $request['gender'],
-            'phone_number' => $request['phone_number'],
-            'dob' => $request['dob'],
-            'email' => $request['email'],
-            'role' => $request['role'],
+            'email' => 'required|string|unique:users,email',
         ]);
 
         User::where('id', $id)->update([
@@ -107,13 +97,30 @@ class UserController extends Controller
             'gender' => $request['gender'],
             'phone_number' => $request['phone_number'],
             'dob' => $request['dob'],
-            'email' => $request['email'],
             'role' => $request['role'],
+            'email' => $request['email'],
         ]);
 
         $user = User::find($id);
         return response()->json($user, 200);
     }
+
+    public function activateUser($id)
+    {
+        $user = User::find($id);
+        $user->status = 1;
+        $user->save();
+        return response()->json(['success' => 'User activated successfully'], 200);
+    }
+
+    public function deactivateUser($id)
+    {
+        $user = User::find($id);
+        $user->status = 0;
+        $user->save();
+        return response()->json(['success' => 'User deactivated successfully'], 200);
+    }
+
 
     /**
      * Remove the specified resource from storage.

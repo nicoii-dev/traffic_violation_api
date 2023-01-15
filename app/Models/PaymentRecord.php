@@ -4,14 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\CitationInfo;
+use App\Models\Invoice;
+use App\Models\CommunityService;
 
 class PaymentRecord extends Model
 {
     use HasFactory;
 
-    public function citation()
+    protected $fillable = [
+        'invoice_id',
+        'discount',
+        'received_date',
+        'payment_method',
+        'total_amount',
+        'total_paid',
+        'remarks',
+    ];
+
+    public function invoice()
     {
-        return $this->hasOne(CitationInfo::class, 'citation_id', 'id');
+        return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
     }
+
 }

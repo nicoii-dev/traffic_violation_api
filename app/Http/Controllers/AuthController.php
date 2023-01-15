@@ -35,12 +35,14 @@ class AuthController extends Controller
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
-        return response($user);
+        return $response = [
+            'user' => $user,
+            'token' => $token
+        ];
     }
 
     public function logout(Request $request) {
         Auth::logout();
-
         return [
             'message' => 'Logged out'
         ];

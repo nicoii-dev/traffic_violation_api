@@ -1,19 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\PaymentRecord;
-class CitationController extends Controller
+use App\Models\Invoice;
+
+class InvoiceController extends Controller
 {
-
-    public function getViolations(Request $request)
-    {
-        $ids = $request['violation_ids'];
-        return DB::table('violation_lists')->whereIn('id', $ids)
-        ->get();
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +14,7 @@ class CitationController extends Controller
      */
     public function index()
     {
-        return DB::table('violation_lists')->whereIn('id', $ids)
-        ->whereNotIn('id', $not_ids)
-        ->where('status', 1)
-        ->get();
+        return Invoice::all();
     }
 
     /**

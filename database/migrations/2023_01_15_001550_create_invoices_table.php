@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('community_services', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('violator_id');
-            $table->string('community_service_details_id');
+            $table->date('date');
+            $table->decimal('total_amount', 8, 2);
             $table->string('status');
             $table->timestamps();
         });
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('community_services');
+        Schema::dropIfExists('invoices');
     }
 };

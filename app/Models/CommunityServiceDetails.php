@@ -5,15 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LicenseInfo extends Model
+class CommunityServiceDetails extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'violator_id',
-        'license_number',
-        'license_type',
-        'license_status',
+        'service_name',
+        'discount'
     ];
-    
 }

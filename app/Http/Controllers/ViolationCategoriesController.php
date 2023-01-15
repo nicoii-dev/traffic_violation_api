@@ -26,7 +26,7 @@ class ViolationCategoriesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_name' => 'required',
+            'category_name' => 'required|unique:violation_categories,category_name'
         ]);
 
         ViolationCategory::create([
@@ -58,7 +58,7 @@ class ViolationCategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'category_name' => 'required',
+            'category_name' => 'required|unique:violation_categories,category_name'
         ]);
 
         ViolationCategory::where('id', $id)->update([

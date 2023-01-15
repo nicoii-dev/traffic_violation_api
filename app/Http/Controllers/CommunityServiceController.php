@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\CommunityService;
 
 class CommunityServiceController extends Controller
 {
@@ -13,7 +14,7 @@ class CommunityServiceController extends Controller
      */
     public function index()
     {
-        //
+        return CommunityService::with('violator', 'service')->get();
     }
 
     /**
@@ -24,7 +25,20 @@ class CommunityServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'violator_id' => 'required',
+            'community_service_details_id' => 'required',
+            'status' => 'required'
+        ]);
+
+        CommunityService::create([
+            'violator_id' => $request['violator_id'],
+            'community_service_details_id' => $request['community_service_details_id'],
+            'status' => 1,
+        ]);
+
+        $community = DB::table('community_services')->get();
+        return response()->json($community, 200);
     }
 
     /**
@@ -47,7 +61,20 @@ class CommunityServiceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'violator_id' => 'required',
+            'community_service_details_id' => 'required',
+            'status' => 'required'
+        ]);
+
+        CommunityService::where('id', $id)->update([
+            'violator_id' => $request['violator_id'],
+            'community_service_details_id' => $request['community_service_details_id'],
+            'status' => $request['status'],
+        ]);
+
+        $community = DB::table('community_services')->get();
+        return response()->json($community, 200);
     }
 
     /**
