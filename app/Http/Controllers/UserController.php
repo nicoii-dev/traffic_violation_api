@@ -87,7 +87,7 @@ class UserController extends Controller
             'phone_number' => 'required',
             'dob' => 'required',
             'role' => 'required',
-            'email' => 'required|string|unique:users,email',
+            // 'email' => 'required|string|unique:users,email',
         ]);
 
         User::where('id', $id)->update([
@@ -98,7 +98,8 @@ class UserController extends Controller
             'phone_number' => $request['phone_number'],
             'dob' => $request['dob'],
             'role' => $request['role'],
-            'email' => $request['email'],
+            // 'email' => $request['email'],
+            'status' => $request['status'],
         ]);
 
         $user = User::find($id);

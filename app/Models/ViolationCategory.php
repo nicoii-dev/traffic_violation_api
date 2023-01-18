@@ -10,7 +10,6 @@ class ViolationCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'violation_categories_id',
         'category_name',
     ];
 

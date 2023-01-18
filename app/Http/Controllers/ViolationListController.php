@@ -14,7 +14,7 @@ class ViolationListController extends Controller
      */
     public function index()
     {
-        return ViolationList::all();
+        return ViolationList::with('category')->get();
     }
 
     public function getByCategory($id)
@@ -36,12 +36,14 @@ class ViolationListController extends Controller
             'violation_categories_id' => 'required',
             'violation_name' => 'required|unique:violation_lists,violation_name',
             'penalty' => 'required',
+            'description' => 'required',
         ]);
 
         ViolationList::create([
             'violation_categories_id' => $request['violation_categories_id'],
             'violation_name' => $request['violation_name'],
             'penalty' => $request['penalty'],
+            'description' => $request['description'],
         ]);
         $categories = DB::table('violation_lists')->get();
         return response()->json($categories, 200);
@@ -70,15 +72,23 @@ class ViolationListController extends Controller
     {
         $request->validate([
             'violation_categories_id' => 'required',
-            'violation_name' => 'required|unique:violation_lists,violation_name',
+            'violation_name' => 'required',
             'penalty' => 'required',
+            'description' => 'required',
         ]);
+
+        $violation = ViolationList::where('violation_name', $request['violation_name'])
+            ->where('id', '!=', $id)
+            ->first();
+        if($violation !== null) {
+            return response()->json('Violation name is already taken', 422);
+        };
 
         ViolationList::where('id', $id)->update([
             'violation_categories_id' => $request['violation_categories_id'],
             'violation_name' => $request['violation_name'],
             'penalty' => $request['penalty'],
-         
+            'description' => $request['description'],
         ]);
         $violation = ViolationList::find($id);
         return response()->json($violation, 200);

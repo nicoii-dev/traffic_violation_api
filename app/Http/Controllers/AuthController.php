@@ -29,16 +29,22 @@ class AuthController extends Controller
         // Check password
         if(!$user || !Hash::check($fields['password'], $user->password)) {
             return response([
-                'message' => 'Bad creds'
+                'message' => 'Incorrect username or password.'
             ], 401);
         }
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
-        return $response = [
-            'user' => $user,
-            'token' => $token
-        ];
+        if($user->status == "1") {
+            $response = [
+                'user' => $user,
+                'token' => $token,
+            ];
+        } else {
+            return response(['message' => 'Account deactivated. Please contact administrator.'], 401);
+        }
+
+        return response($response);
     }
 
     public function logout(Request $request) {
@@ -61,7 +67,7 @@ class AuthController extends Controller
         // Check password
         if(!$user || !Hash::check($fields['current_password'], $user->password)) {
             return response([
-                'message' => 'Bad creds'
+                'message' => 'Incorrect current password.'
             ], 401);
         }
 
@@ -71,7 +77,7 @@ class AuthController extends Controller
         $response = [
             $user,
         ];
-        return response("success", 200);
+        return response("Password updated successfully", 200);
     }
 
  

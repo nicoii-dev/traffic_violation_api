@@ -36,13 +36,13 @@ return new class extends Migration
                 'first_name' => 'admin',
                 'middle_name' => 'admin',
                 'last_name' => 'admin',
-                'gender' => 'admin',
+                'gender' => 'Male',
                 'phone_number' => '09751234567',
-                'dob' => 'admin',
-                'role' => 'ADMIN',
+                'dob' => '01/01/2000',
+                'role' => 'admin',
                 'status' => '1',
-                'email' => 'admin@domain.com',
-                'password' => bcrypt('recordsadmin'),
+                'email' => 'admin@admin.com',
+                'password' => bcrypt('Default123'),
             )
         );
     }

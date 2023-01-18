@@ -17,8 +17,9 @@ return new class extends Migration
         Schema::create('violation_lists', function (Blueprint $table) {
             $table->id();
             $table->string('violation_categories_id');
-            $table->string('violation_name')->unique();
+            $table->string('violation_name');
             $table->string('penalty');
+            $table->longText('description');
             $table->timestamps();
         });
     }

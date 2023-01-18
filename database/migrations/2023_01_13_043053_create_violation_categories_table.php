@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('violation_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('category_name')->unique();
+            $table->increments('id');
+            $table->string('category_name');
             $table->timestamps();
         });
     }
