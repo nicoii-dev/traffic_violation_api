@@ -32,8 +32,13 @@ class Violator extends Model
         return $this->hasOne(Vehicle::class, 'violator_id', 'id');
     }
 
-    public function citation() {
-        return $this->hasOne(CitationInfo::class, 'violator_id', 'id');
-    }
+    // public function citation() {
+    //     return $this->hasOne(CitationInfo::class, 'violator_id', 'id');
+    // }
+
+    // public function violations()
+    // {
+    //     return $this->hasMany(ViolationList::class, 'id', array('violations'));
+    // }
     
 }

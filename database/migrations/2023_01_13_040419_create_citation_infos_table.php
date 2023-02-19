@@ -16,8 +16,10 @@ return new class extends Migration
     {
         Schema::create('citation_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('violator_id');
             $table->string('user_id');
+            $table->string('violator_id');
+            $table->string('license_id');
+            $table->string('vehicle_id');
             $table->string('violations');
             $table->date('date_of_violation');
             $table->string('time_of_violation');

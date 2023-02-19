@@ -47,11 +47,18 @@ class AuthController extends Controller
         return response($response);
     }
 
-    public function logout(Request $request) {
-        Auth::logout();
-        return [
-            'message' => 'Logged out'
-        ];
+    public function logout ()
+    {
+        if(isset(Auth::user()->id)){
+            Auth::user()->tokens()->where('id', Auth::user()->currentAccessToken()->id)->delete();
+            return response()->json([
+                'status' => true
+            ], 200);
+        }else{
+            return response()->json([
+                'status' => false
+            ], 401);
+        }
     }
 
     public function changePassword(Request $request) {
