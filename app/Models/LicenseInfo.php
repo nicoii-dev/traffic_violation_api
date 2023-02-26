@@ -16,4 +16,8 @@ class LicenseInfo extends Model
         'license_status',
     ];
     
+    public function violator()
+    {
+        return $this->belongsTo(Violator::class, 'violator_id', 'id');
+    }
 }

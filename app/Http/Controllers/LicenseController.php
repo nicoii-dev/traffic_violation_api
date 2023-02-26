@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\LicenseInfo;
 use Illuminate\Http\Request;
 
 class LicenseController extends Controller
@@ -11,6 +11,21 @@ class LicenseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+    public function searchLicense(Request $request) {
+        $request->validate([
+            'license_number' => 'required',
+        ]);
+        
+        $license = LicenseInfo::where('license_number', $request['license_number'])->with('violator')->first();
+
+        if(strlen($license) > 0) {
+            return response()->json($license, 200);
+        } else {
+            return response()->json(['message' => 'No record'], 422);
+        }
+    }
+
     public function index()
     {
         //
@@ -47,7 +62,25 @@ class LicenseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'license_number' => 'required',
+            'license_type' => 'required',
+            'license_status' => 'required',
+        ]);
+
+        $license = LicenseInfo::where('license_number', $request['license_number'])
+        ->where('id', '!=', $id)
+        ->first();
+        if($license !== null) {
+            return response()->json(['message' => 'License number is already taken'], 422);
+        };
+        LicenseInfo::where('id', $id)->update([
+            'license_number' => $request['license_number'],
+            'license_type' => $request['license_type'],
+            'license_status' => $request['license_status'],
+        ]);
+        $licenseInfo = LicenseInfo::find($id)->with('violator')->first();
+        return response()->json($licenseInfo, 200);
     }
 
     /**

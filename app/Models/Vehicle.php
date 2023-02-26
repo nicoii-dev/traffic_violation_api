@@ -21,4 +21,9 @@ class Vehicle extends Model
         'owner_address',
         'vehicle_status',
     ];
+
+    public function violator()
+    {
+        return $this->belongsTo(Violator::class, 'violator_id', 'id');
+    }
 }

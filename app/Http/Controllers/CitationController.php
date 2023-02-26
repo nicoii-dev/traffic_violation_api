@@ -49,13 +49,13 @@ class CitationController extends Controller
             'nationality' => 'required',
             'phone_number' => 'required',
             'dob' => 'required',
-            'license_number' => 'required',
+            'license_number' => 'required|string|unique:license_infos,license_number',
             'license_type' => 'required',
             'license_status' => 'required',
-            'plate_number' => 'required',
-            // 'make' => 'required',
-            // 'model' => 'required',
-            // 'color' => 'required',
+            'plate_number' => 'required|string|unique:vehicles,plate_number',
+            'make' => 'required',
+            'model' => 'required',
+            'color' => 'required',
             // 'class' => 'required',
             // 'body_markings' => 'required',
             'registered_owner' => 'required',
@@ -200,7 +200,7 @@ class CitationController extends Controller
             $violator = DB::table('citation_infos')->get();
             return response()->json($violator, 200);
         }else{
-            return response()->json(['message' => 'Unprocessable'], 429);;
+            return response()->json(['message' => 'Unprocessable'], 422);;
         }
     }
 

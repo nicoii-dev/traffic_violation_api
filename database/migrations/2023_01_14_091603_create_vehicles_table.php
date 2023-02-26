@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
             $table->string('violator_id');
-            $table->string('plate_number');
+            $table->string('plate_number')->unique();
             $table->string('make')->nullable();
             $table->string('model')->nullable();
             $table->string('color')->nullable();

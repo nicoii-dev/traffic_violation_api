@@ -11,6 +11,8 @@ use App\Http\Controllers\ViolationCategoriesController;
 use App\Http\Controllers\ViolationListController;
 use App\Http\Controllers\ViolatorController;
 use App\Http\Controllers\CitationController;
+use App\Http\Controllers\LicenseController;
+use App\Http\Controllers\VehicleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -67,6 +69,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/view-citation/{id}', [CitationController::class, 'show']);
     Route::put('/update-citation/{id}', [CitationController::class, 'update']);
     Route::post('/delete-citation/{id}', [CitationController::class, 'destroy']);
+
+    Route::post('/license/search', [LicenseController::class, 'searchLicense']);
+    Route::put('/license/update/{id}', [LicenseController::class, 'update']);
+    
+    Route::post('/vehicle/search', [VehicleController::class, 'searchVehicle']);
+    Route::put('/vehicle/update/{id}', [VehicleController::class, 'update']);
 
     Route::get('/payment', [PaymentController::class, 'index']);
     Route::post('/create-payment', [PaymentController::class, 'store']);
