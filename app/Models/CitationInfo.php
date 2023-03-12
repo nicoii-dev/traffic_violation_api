@@ -8,6 +8,7 @@ use App\Models\Violator;
 use App\Models\User;
 use App\Models\LicenseInfo;
 use App\Models\Vehicle;
+use App\Models\Invoice;
 
 class CitationInfo extends Model
 {
@@ -45,5 +46,10 @@ class CitationInfo extends Model
     public function vehicle() {
         // return $this->hasOne($this, 'violator_id', 'id');
         return $this->belongsTo(Vehicle::class, 'vehicle_id', 'id');
+    }
+
+    public function invoice() {
+        // return $this->hasOne($this, 'violator_id', 'id');
+        return $this->hasOne(Invoice::class, 'citation_id', 'id');
     }
 }

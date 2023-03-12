@@ -11,7 +11,7 @@ class Invoice extends Model
     use HasFactory;
 
     protected $fillable = [
-        'violator_id',
+        'citation_id',
         'date',
         'total_amount',
         'status'
@@ -19,6 +19,6 @@ class Invoice extends Model
 
     public function violator()
     {
-        return $this->belongsTo(Violator::class, 'violator_id', 'id');
+        return $this->belongsTo(Violator::class, 'citation_id', 'id');
     }
 }

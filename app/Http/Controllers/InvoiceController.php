@@ -17,6 +17,12 @@ class InvoiceController extends Controller
         return Invoice::all();
     }
 
+    public function invoiceByViolator(Request $request)
+    {
+        //
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *

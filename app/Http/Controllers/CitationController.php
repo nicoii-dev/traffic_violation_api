@@ -32,6 +32,31 @@ class CitationController extends Controller
         return response()->json($citation, 200);
     }
 
+    public function getCitationByEnforcer($id)
+    {
+        $citation = CitationInfo::where('user_id', $id)->with('violator')->groupBy("violator_id")->orderBy('created_at','desc')->distinct()->get();
+        
+        foreach($citation as &$row)
+        {
+            $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
+            $row->violations = json_encode($violationList);
+        }
+
+        return response()->json($citation, 200);
+    }
+
+    public function getCitationByViolator($id)
+    {
+        $citation = CitationInfo::where('violator_id', $id)->with('violator', 'license', 'vehicle', 'invoice')->orderBy('created_at','desc')->get();
+        
+        foreach($citation as &$row)
+        {
+            $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
+            $row->violations = json_encode($violationList);
+        }
+        return response()->json($citation, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -102,7 +127,7 @@ class CitationController extends Controller
             'vehicle_status' => $request['vehicle_status'],
         ]);
 
-        CitationInfo::create([
+        $citation = CitationInfo::create([
             'user_id' => Auth::user()->id,
             'violator_id' => $violator->id,
             'license_id' => $license->id,
@@ -117,7 +142,7 @@ class CitationController extends Controller
         ]);
 
         $invoice = Invoice::create([
-            'violator_id' => $violator->id,
+            'citation_id' => $citation->id,
             'date' => $request['date_of_violation'],
             'total_amount' => $request['total_amount'],
             'status' => 1,
