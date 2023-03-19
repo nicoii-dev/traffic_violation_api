@@ -65,7 +65,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/delete-violator/{id}', [ViolatorController::class, 'destroy']);
 
     Route::get('/citation', [CitationController::class, 'index']);
-    Route::post('/user-citationlist/{id}', [CitationController::class, 'getCitationByEnforcer']);
+    Route::post('/user-citationlist/{id}', [CitationController::class, 'getAllCitationByEnforcer']);
+    Route::post('/user-citationlist-groupby/{id}', [CitationController::class, 'getCitationByEnforcerGroupBy']);
     Route::post('/violator-citationlist/{id}', [CitationController::class, 'getCitationByViolator']);
     Route::post('/create-citation', [CitationController::class, 'store']);
     Route::post('/view-citation/{id}', [CitationController::class, 'show']);

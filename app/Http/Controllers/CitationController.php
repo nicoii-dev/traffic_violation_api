@@ -32,11 +32,24 @@ class CitationController extends Controller
         return response()->json($citation, 200);
     }
 
-    public function getCitationByEnforcer($id)
+    public function getAllCitationByEnforcer($id)
+    {
+        $citation = CitationInfo::where('user_id', $id)->with('violator', 'enforcer', 'license', 'vehicle')->orderBy('created_at','desc')->distinct()->get();
+        
+        foreach($citation as $row)
+        {
+            $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
+            $row->violations = json_encode($violationList);
+        }
+
+        return response()->json($citation, 200);
+    }
+
+    public function getCitationByEnforcerGroupBy($id)
     {
         $citation = CitationInfo::where('user_id', $id)->with('violator')->groupBy("violator_id")->orderBy('created_at','desc')->distinct()->get();
         
-        foreach($citation as &$row)
+        foreach($citation as $row)
         {
             $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
             $row->violations = json_encode($violationList);
@@ -49,7 +62,7 @@ class CitationController extends Controller
     {
         $citation = CitationInfo::where('violator_id', $id)->with('violator', 'license', 'vehicle', 'invoice')->orderBy('created_at','desc')->get();
         
-        foreach($citation as &$row)
+        foreach($citation as $row)
         {
             $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
             $row->violations = json_encode($violationList);
@@ -94,6 +107,8 @@ class CitationController extends Controller
             'zipcode' => 'required',
             'barangay' => 'required',
             'street' => 'required',
+            
+            'total_amount' => 'required',
         ]);
 
         $violator = $this->CheckViolator(
@@ -150,7 +165,7 @@ class CitationController extends Controller
         foreach(json_decode($request['violations']) as $violations) {
             InvoiceDetails::create([
                 'invoice_id' => $invoice->id,
-                'date' => $request['date'],
+                'date' => $request['date_of_violation'],
                 'violation_id' => $violations,
             ]);
         }
