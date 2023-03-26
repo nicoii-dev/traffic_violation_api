@@ -7,7 +7,9 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class AuthController extends Controller
@@ -84,8 +86,6 @@ class AuthController extends Controller
         $response = [
             $user,
         ];
-        return response("Password updated successfully", 200);
+        return response()->json(["message" => "Password updated successfully"], 200);
     }
-
- 
 }

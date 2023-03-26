@@ -13,6 +13,7 @@ use App\Http\Controllers\ViolatorController;
 use App\Http\Controllers\CitationController;
 use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\ForgotPasswordController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,11 +31,13 @@ use App\Http\Controllers\VehicleController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
-Route::post('/change-password', [AuthController::class, 'changePassword']);
-Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.email');
-
+Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
+Route::post('/forgot-password-otp', [ForgotPasswordController::class, 'forgotPasswordOtp'])->middleware('guest')->name('password.email');
+Route::post('/reset-password-otp', [ForgotPasswordController::class, 'resetPasswordOtp'])->middleware('guest')->name('password.reset');
     //for authenticated
 Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::post('/change-password', [AuthController::class, 'changePassword']);
 
     Route::get('/user', [UserController::class, 'index']);
     Route::post('/create-user', [UserController::class, 'store']);
