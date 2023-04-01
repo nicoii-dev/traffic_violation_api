@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Invoice;
+use App\Models\ViolationList;
 
 class InvoiceController extends Controller
 {
@@ -14,7 +15,13 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return Invoice::all();
+        $invoices = Invoice::with('violator')->get();
+        foreach($invoices as &$row)
+        {
+            $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
+            $row->violations = $violationList;
+        }
+        return response()->json($invoices, 200);
     }
 
     public function invoiceByViolator(Request $request)
@@ -42,7 +49,10 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+        $invoice = Invoice::find($id)->with('violator')->first();
+        $violationList = ViolationList::whereIn('id', json_decode($invoice->violations))->get();
+        $invoice->violations = $violationList;
+        return response()->json($invoice, 200);
     }
 
     /**

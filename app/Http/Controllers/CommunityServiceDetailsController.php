@@ -25,7 +25,20 @@ class CommunityServiceDetailsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'service_name' => 'required|unique:community_service_details,service_name',
+            'discount' => 'required',
+            'time_to_render' => 'required'
+        ]);
+
+        CommunityServiceDetails::create([
+            'service_name' => $request['service_name'],
+            'discount' => $request['discount'],
+            'time_to_render' => $request['time_to_render'],
+        ]);
+
+        $community = DB::table('community_service_details')->get();
+        return response()->json(["message" => "Created Successfully", "data" => $community], 200);
     }
 
     /**
@@ -51,16 +64,25 @@ class CommunityServiceDetailsController extends Controller
     {
         $request->validate([
             'service_name' => 'required',
-            'discount' => 'required'
+            'discount' => 'required',
+            'time_to_render' => 'required'
         ]);
+
+        $communityService = CommunityServiceDetails::where('service_name', $request['service_name'])
+        ->where('id', '!=', $id)
+        ->first();
+        if($communityService !== null) {
+            return response()->json(["message" => 'The service name has already been taken.'], 422);
+        };
 
         CommunityServiceDetails::where('id', $id)->update([
             'service_name' => $request['service_name'],
             'discount' => $request['discount'],
+            'time_to_render' => $request['time_to_render'],
         ]);
 
         $community = DB::table('community_service_details')->get();
-        return response()->json($community, 200);
+        return response()->json(["message" => "Updated Successfully", "data" => $community], 200);
     }
 
     /**
@@ -71,6 +93,11 @@ class CommunityServiceDetailsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(DB::table("community_service_details")->where('id',$id)->delete()){
+            $categories = DB::table('community_service_details')->get();
+            return response()->json($categories, 200);
+        }else{
+            return 500;
+        }
     }
 }

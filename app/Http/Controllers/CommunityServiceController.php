@@ -14,7 +14,8 @@ class CommunityServiceController extends Controller
      */
     public function index()
     {
-        return CommunityService::with('violator', 'service')->get();
+        $communityService = CommunityService::with('violator', 'service')->get();
+        return response()->json($communityService, 200);
     }
 
     /**
@@ -28,17 +29,19 @@ class CommunityServiceController extends Controller
         $request->validate([
             'violator_id' => 'required',
             'community_service_details_id' => 'required',
-            'status' => 'required'
+            'status' => 'required',
+            'rendered_time' => 'required',
         ]);
 
         CommunityService::create([
             'violator_id' => $request['violator_id'],
             'community_service_details_id' => $request['community_service_details_id'],
+            'rendered_time' => $request['rendered_time'],
             'status' => 1,
         ]);
 
-        $community = DB::table('community_services')->get();
-        return response()->json($community, 200);
+        $community = CommunityService::with('violator', 'service')->get();
+        return response()->json(["message" => "Successfully Created", "data" => $community], 200);
     }
 
     /**
@@ -49,7 +52,8 @@ class CommunityServiceController extends Controller
      */
     public function show($id)
     {
-        //
+        $service = CommunityService::find($id);
+        return response()->json($service, 200);
     }
 
     /**
@@ -64,17 +68,19 @@ class CommunityServiceController extends Controller
         $request->validate([
             'violator_id' => 'required',
             'community_service_details_id' => 'required',
+            'rendered_time' => 'required',
             'status' => 'required'
         ]);
 
         CommunityService::where('id', $id)->update([
             'violator_id' => $request['violator_id'],
             'community_service_details_id' => $request['community_service_details_id'],
+            'rendered_time' => $request['rendered_time'],
             'status' => $request['status'],
         ]);
 
-        $community = DB::table('community_services')->get();
-        return response()->json($community, 200);
+        $community = CommunityService::where('id', $id)->with('violator', 'service')->get();
+        return response()->json(["message" => "Updated Successfully", "data" => $community], 200);
     }
 
     /**

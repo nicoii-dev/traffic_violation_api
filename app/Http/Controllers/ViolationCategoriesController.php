@@ -58,12 +58,18 @@ class ViolationCategoriesController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'category_name' => 'required|unique:violation_categories,category_name'
+            'category_name' => 'required'
         ]);
+
+        $violationCategory = ViolationCategory::where('category_name', $request['category_name'])
+        ->where('id', '!=', $id)
+        ->first();
+        if($violationCategory !== null) {
+            return response()->json('The violation category name has already been taken.', 422);
+        };
 
         ViolationCategory::where('id', $id)->update([
             'category_name' => $request['category_name'],
-         
         ]);
         $category = ViolationCategory::find($id);
         return response()->json($category, 200);

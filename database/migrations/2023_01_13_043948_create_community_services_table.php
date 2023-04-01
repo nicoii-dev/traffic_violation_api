@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('community_services', function (Blueprint $table) {
             $table->id();
-            $table->string('violator_id');
+            $table->string('invoice_id');
             $table->string('community_service_details_id');
+            $table->string('rendered_time');
             $table->string('status');
             $table->timestamps();
         });

@@ -13,6 +13,7 @@ class CommunityService extends Model
     protected $fillable = [
         'violator_id',
         'community_service_details_id',
+        'rendered_time',
         'status'
     ];
 

@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('citation_id');
             $table->date('date');
+            $table->string('violations');
+            $table->decimal('sub_total', 8, 2);
+            $table->string('discount');
             $table->decimal('total_amount', 8, 2);
             $table->string('status');
             $table->timestamps();

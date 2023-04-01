@@ -11,6 +11,7 @@ class CommunityServiceDetails extends Model
 
     protected $fillable = [
         'service_name',
-        'discount'
+        'discount',
+        'time_to_render'
     ];
 }

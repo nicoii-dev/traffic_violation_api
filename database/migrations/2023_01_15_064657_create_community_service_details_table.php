@@ -17,17 +17,19 @@ return new class extends Migration
             $table->id();
             $table->string('service_name');
             $table->string('discount');
+            $table->string('time_to_render');
             $table->timestamps();
         });
 
-            // Insert some stuff
-            DB::table('community_service_details')->insert(
-            array(
-                'id' => '1',
-                'service_name' => 'Community Service',
-                'discount' => '10',
-            )
-        );
+            // // Insert some stuff
+            // DB::table('community_service_details')->insert(
+            //     array(
+            //         'id' => '1',
+            //         'service_name' => 'Community Service',
+            //         'discount' => '10',
+            //         'time_to_render' => '8',
+            //     )
+            // );
     }
 
     /**

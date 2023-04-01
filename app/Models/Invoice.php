@@ -13,6 +13,9 @@ class Invoice extends Model
     protected $fillable = [
         'citation_id',
         'date',
+        'violations',
+        'sub_total',
+        'discount',
         'total_amount',
         'status'
     ];

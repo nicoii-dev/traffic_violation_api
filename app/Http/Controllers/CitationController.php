@@ -11,7 +11,6 @@ use App\Models\LicenseInfo;
 use App\Models\Vehicle;
 use App\Models\CitationInfo;
 use App\Models\Invoice;
-use App\Models\InvoiceDetails;
 class CitationController extends Controller
 {
     /**
@@ -21,7 +20,7 @@ class CitationController extends Controller
      */
     public function index()
     {
-        $citation = CitationInfo::with('violator', 'enforcer', 'license', 'vehicle')->get();
+        $citation = CitationInfo::with('violator', 'enforcer', 'license', 'vehicle', 'invoice')->get();
         // $violationIds = $citation->violations; //getting violation ids only
 
         foreach($citation as &$row)
@@ -108,7 +107,7 @@ class CitationController extends Controller
             'barangay' => 'required',
             'street' => 'required',
             
-            'total_amount' => 'required',
+            'sub_total' => 'required',
         ]);
 
         $violator = $this->CheckViolator(
@@ -159,16 +158,12 @@ class CitationController extends Controller
         $invoice = Invoice::create([
             'citation_id' => $citation->id,
             'date' => $request['date_of_violation'],
-            'total_amount' => $request['total_amount'],
+            'violations' => $request['violations'],
+            'sub_total' => $request['sub_total'],
+            'discount' => 0,
+            'total_amount' => $request['sub_total'],
             'status' => 'unpaid',
         ]);
-        foreach(json_decode($request['violations']) as $violations) {
-            InvoiceDetails::create([
-                'invoice_id' => $invoice->id,
-                'date' => $request['date_of_violation'],
-                'violation_id' => $violations,
-            ]);
-        }
 
         $citation = CitationInfo::with('violator', 'enforcer', 'license', 'vehicle')->get();
 
@@ -235,7 +230,7 @@ class CitationController extends Controller
             'barangay' => 'required',
             'street' => 'required',
             
-            'total_amount' => 'required',
+            'sub_total' => 'required',
         ]);
 
         $violator = $this->CheckViolator(
@@ -250,6 +245,9 @@ class CitationController extends Controller
         );
 
         $citationInfo = CitationInfo::find($id);
+        if($citationInfo === null) {
+            return response()->json(['message' => 'No record'], 422);
+        }
         CitationInfo::where('id', $id)->update([
             'violations' => $request['violations'],
             'violator_id' => $violator->id,
@@ -259,6 +257,16 @@ class CitationController extends Controller
             'zipcode' => $request['zipcode'],
             'barangay' => $request['barangay'],
             'street' => $request['street'],
+        ]);
+
+        $invoice = Invoice::where('id', $id)->update([
+            'citation_id' => $id,
+            'date' => $request['date_of_violation'],
+            'violations' => $request['violations'],
+            'sub_total' => $request['sub_total'],
+            'discount' => 0,
+            'total_amount' => $request['sub_total'],
+            'status' => 'unpaid',
         ]);
 
         $license = LicenseInfo::where('license_number', $request['license_number'])
@@ -293,7 +301,7 @@ class CitationController extends Controller
             'vehicle_status' => $request['vehicle_status'],
         ]);
 
-        $citation = CitationInfo::where('id', $id)->with('violator', 'enforcer', 'license', 'vehicle')->get();
+        $citation = CitationInfo::where('id', $id)->with('violator', 'enforcer', 'license', 'vehicle', 'invoice')->get();
 
         foreach($citation as &$row)
         {

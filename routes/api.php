@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommunityServiceController;
 use App\Http\Controllers\CommunityServiceDetailsController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ViolationCategoriesController;
 use App\Http\Controllers\ViolationListController;
@@ -82,20 +83,27 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/vehicle/search', [VehicleController::class, 'searchVehicle']);
     Route::put('/vehicle/update/{id}', [VehicleController::class, 'update']);
 
+    Route::get('/invoices', [InvoiceController::class, 'index']);
+    Route::post('/invoice/update/{id}', [InvoiceController::class, 'update']);
+    Route::post('/invoice/view/{id}', [InvoiceController::class, 'show']);
+    Route::post('/invoice/delete/{id}', [InvoiceController::class, 'destroy']);
+    
     Route::get('/payment', [PaymentController::class, 'index']);
     Route::post('/create-payment', [PaymentController::class, 'store']);
     Route::post('/view-payment/{id}', [PaymentController::class, 'show']);
     Route::put('/update-payment/{id}', [PaymentController::class, 'update']);
     Route::post('/delete-payment/{id}', [PaymentController::class, 'destroy']);
 
-    Route::get('/community', [CommunityServiceController::class, 'index']);
-    Route::post('/create-community', [CommunityServiceController::class, 'store']);
-    Route::post('/view-community/{id}', [CommunityServiceController::class, 'show']);
-    Route::put('/update-community/{id}', [CommunityServiceController::class, 'update']);
-    Route::post('/delete-community/{id}', [CommunityServiceController::class, 'destroy']);
+    Route::get('/community-service', [CommunityServiceController::class, 'index']);
+    Route::post('/community-service/create', [CommunityServiceController::class, 'store']);
+    Route::post('/community-service/view/{id}', [CommunityServiceController::class, 'show']);
+    Route::put('/community-service/update/{id}', [CommunityServiceController::class, 'update']);
+    Route::post('/community-service/delete/{id}', [CommunityServiceController::class, 'destroy']);
 
-    Route::get('/community-details', [CommunityServiceDetailsController::class, 'index']);
-    Route::post('/view-community-details/{id}', [CommunityServiceDetailsController::class, 'show']);
-    Route::put('/update-community-details/{id}', [CommunityServiceDetailsController::class, 'update']);
+    Route::get('/community-service-types', [CommunityServiceDetailsController::class, 'index']);
+    Route::post('/community-service-types/create', [CommunityServiceDetailsController::class, 'store']);
+    Route::post('/community-service-types/view/{id}', [CommunityServiceDetailsController::class, 'show']);
+    Route::put('/community-service-types/update/{id}', [CommunityServiceDetailsController::class, 'update']);
+    Route::post('/community-service-types/delete/{id}', [CommunityServiceController::class, 'store']);
 
 });
