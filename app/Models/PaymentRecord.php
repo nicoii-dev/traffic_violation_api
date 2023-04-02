@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Invoice;
-use App\Models\CommunityService;
 
 class PaymentRecord extends Model
 {
@@ -13,10 +12,8 @@ class PaymentRecord extends Model
 
     protected $fillable = [
         'invoice_id',
-        'discount',
-        'received_date',
+        'payment_date',
         'payment_method',
-        'total_amount',
         'total_paid',
         'remarks',
     ];

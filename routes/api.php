@@ -104,6 +104,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/community-service-types/create', [CommunityServiceDetailsController::class, 'store']);
     Route::post('/community-service-types/view/{id}', [CommunityServiceDetailsController::class, 'show']);
     Route::put('/community-service-types/update/{id}', [CommunityServiceDetailsController::class, 'update']);
-    Route::post('/community-service-types/delete/{id}', [CommunityServiceController::class, 'store']);
+    Route::post('/community-service-types/delete/{id}', [CommunityServiceDetailsController::class, 'store']);
 
 });

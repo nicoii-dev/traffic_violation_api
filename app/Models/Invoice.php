@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Violator;
+use App\Models\CitationInfo;
 
 class Invoice extends Model
 {
@@ -20,8 +20,8 @@ class Invoice extends Model
         'status'
     ];
 
-    public function violator()
+    public function citation()
     {
-        return $this->belongsTo(Violator::class, 'citation_id', 'id');
+        return $this->belongsTo(CitationInfo::class, 'citation_id', 'id');
     }
 }

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\CommunityService;
+use App\Models\CommunityServiceDetails;
+use App\Models\Invoice;
+use App\Models\Violator;
+use App\Models\Citation;
 
 class CommunityServiceController extends Controller
 {
@@ -14,7 +18,7 @@ class CommunityServiceController extends Controller
      */
     public function index()
     {
-        $communityService = CommunityService::with('violator', 'service')->get();
+        $communityService = CommunityService::with('citation', 'citation.violator', 'invoice', 'service')->get();
         return response()->json($communityService, 200);
     }
 
@@ -27,20 +31,37 @@ class CommunityServiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'violator_id' => 'required',
+            'citation_id' => 'required',
+            'invoice_id' => 'required',
             'community_service_details_id' => 'required',
             'status' => 'required',
             'rendered_time' => 'required',
         ]);
 
         CommunityService::create([
-            'violator_id' => $request['violator_id'],
+            'citation_id' => $request['citation_id'],
+            'invoice_id' => $request['invoice_id'],
             'community_service_details_id' => $request['community_service_details_id'],
             'rendered_time' => $request['rendered_time'],
-            'status' => 1,
+            'status' => $request['status'],
         ]);
 
-        $community = CommunityService::with('violator', 'service')->get();
+        if($request['status'] === 'settled') {
+            $service_details = CommunityServiceDetails::where('id', $request['community_service_details_id'])->first();
+            $invoice = Invoice::where('id', $request['invoice_id'])->first();
+            $discount = $service_details->discount / 100;
+            $total = $invoice->total_amount - ($discount * $invoice->total_amount);
+            Invoice::where('id', $request['invoice_id'])->update([
+                'discount' => $service_details->discount,
+                'total_amount' => $total
+            ]);
+        }
+
+        Invoice::where('id', $request['invoice_id'])->update([
+            'status' => 'processed',
+        ]);
+
+        $community = CommunityService::with('citation', 'invoice', 'service')->get();
         return response()->json(["message" => "Successfully Created", "data" => $community], 200);
     }
 
@@ -52,7 +73,7 @@ class CommunityServiceController extends Controller
      */
     public function show($id)
     {
-        $service = CommunityService::find($id);
+        $service = CommunityService::where('id', $id)->with('citation', 'citation.violator', 'invoice', 'service')->get();
         return response()->json($service, 200);
     }
 
@@ -66,20 +87,40 @@ class CommunityServiceController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'violator_id' => 'required',
+            'citation_id' => 'required',
+            'invoice_id' => 'required',
             'community_service_details_id' => 'required',
             'rendered_time' => 'required',
             'status' => 'required'
         ]);
 
+        $communityService = CommunityService::where('id', $id)->first();
+        if($communityService->citation_id != $request['citation_id']) {
+            Invoice::where('id', $communityService->invoice_id)->update([
+                'status' => 'unpaid',
+            ]);
+        }
+
+        if($request['status'] === 'settled') {
+            $service_details = CommunityServiceDetails::where('id', $request['community_service_details_id'])->first();
+            $invoice = Invoice::where('id', $request['invoice_id'])->first();
+            $discount = $service_details->discount / 100;
+            $total = $invoice->total_amount - ($discount * $invoice->total_amount);
+            Invoice::where('id', $request['invoice_id'])->update([
+                'discount' => $service_details->discount,
+                'total_amount' => $total
+            ]);
+        }
+
         CommunityService::where('id', $id)->update([
-            'violator_id' => $request['violator_id'],
+            'citation_id' => $request['citation_id'],
+            'invoice_id' => $request['invoice_id'],
             'community_service_details_id' => $request['community_service_details_id'],
             'rendered_time' => $request['rendered_time'],
             'status' => $request['status'],
         ]);
 
-        $community = CommunityService::where('id', $id)->with('violator', 'service')->get();
+        $community = CommunityService::where('id', $id)->with('citation', 'invoice', 'service')->get();
         return response()->json(["message" => "Updated Successfully", "data" => $community], 200);
     }
 
