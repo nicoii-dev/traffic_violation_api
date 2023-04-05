@@ -15,6 +15,8 @@ use App\Http\Controllers\CitationController;
 use App\Http\Controllers\LicenseController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReportsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -89,6 +91,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/invoice/delete/{id}', [InvoiceController::class, 'destroy']);
     
     Route::get('/payment', [PaymentController::class, 'index']);
+    Route::get('/payment/{id}', [PaymentController::class, 'paymentUser']);
     Route::post('/create-payment', [PaymentController::class, 'store']);
     Route::post('/view-payment/{id}', [PaymentController::class, 'show']);
     Route::put('/update-payment/{id}', [PaymentController::class, 'update']);
@@ -106,4 +109,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/community-service-types/update/{id}', [CommunityServiceDetailsController::class, 'update']);
     Route::post('/community-service-types/delete/{id}', [CommunityServiceDetailsController::class, 'store']);
 
+    Route::post('/dashboard', [DashboardController::class, 'index']);
+
+    Route::post('/reports/income', [ReportsController::class, 'incomeReport']);
+    Route::post('/reports/income/{id}', [ReportsController::class, 'incomeReportByUser']);
 });

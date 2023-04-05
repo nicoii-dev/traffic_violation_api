@@ -18,7 +18,7 @@ class InvoiceController extends Controller
         $invoices = Invoice::with('citation.violator')->get();
         foreach($invoices as &$row)
         {
-            $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
+            $violationList = ViolationList::whereIn('id', json_decode($row->violations))->with('category')->get();
             $row->violations = $violationList;
         }
         return response()->json($invoices, 200);
@@ -50,7 +50,7 @@ class InvoiceController extends Controller
     public function show($id)
     {
         $invoice = Invoice::find($id)->with('violator')->first();
-        $violationList = ViolationList::whereIn('id', json_decode($invoice->violations))->get();
+        $violationList = ViolationList::whereIn('id', json_decode($invoice->violations))->with('category')->get();
         $invoice->violations = $violationList;
         return response()->json($invoice, 200);
     }

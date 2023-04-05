@@ -24,4 +24,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(CitationInfo::class, 'citation_id', 'id');
     }
+
+    public function category()
+    {
+        return $this->belongsTo(ViolationCategory::class, 'violation_categories_id', 'id');
+    }
 }

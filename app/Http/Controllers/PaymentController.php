@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\PaymentRecord;
 use App\Models\Invoice;
@@ -16,6 +17,12 @@ class PaymentController extends Controller
     public function index()
     {
         $data = PaymentRecord::with('invoice', 'invoice.citation.violator')->get();
+        return response()->json($data, 200);
+    }
+
+    public function paymentUser($id)
+    {
+        $data = PaymentRecord::where('id', $id)->with('invoice', 'invoice.citation.violator')->get();
         return response()->json($data, 200);
     }
 
@@ -37,6 +44,7 @@ class PaymentController extends Controller
 
         PaymentRecord::create([
             'invoice_id' => $request['invoice_id'],
+            'user_id' => Auth::user()->id,
             'payment_date' => $request['payment_date'],
             'payment_method' => $request['payment_method'],
             'total_paid' => $request['total_paid'],

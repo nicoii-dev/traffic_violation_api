@@ -12,6 +12,7 @@ class PaymentRecord extends Model
 
     protected $fillable = [
         'invoice_id',
+        'user_id',
         'payment_date',
         'payment_method',
         'total_paid',
