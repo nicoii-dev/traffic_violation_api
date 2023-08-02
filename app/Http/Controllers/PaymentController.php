@@ -22,7 +22,7 @@ class PaymentController extends Controller
 
     public function paymentUser($id)
     {
-        $data = PaymentRecord::where('id', $id)->with('invoice', 'invoice.citation.violator')->get();
+        $data = PaymentRecord::where('user_id', $id)->with('invoice', 'invoice.citation.violator')->get();
         return response()->json($data, 200);
     }
 

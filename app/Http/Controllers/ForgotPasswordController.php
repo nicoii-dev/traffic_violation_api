@@ -28,12 +28,14 @@ class ForgotPasswordController extends Controller
 
         if ($status == Password::RESET_LINK_SENT) {
             return [
-                'status' => __($status)
+                'message' => __($status),
+                'status' => 200
             ];
         }
 
         return [
-            'email' => [trans($status)],
+            'message' => trans($status),
+            'status' => 422
         ];
     }
 
@@ -42,7 +44,8 @@ class ForgotPasswordController extends Controller
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => ['required', 'confirmed',],
+            'password' => 'required',
+            'password_confirmation' => 'required'
         ]);
 
         $status = Password::reset(
@@ -75,7 +78,7 @@ class ForgotPasswordController extends Controller
         $input = $request->only('email');
         $user = User::where('email', $input)->first();
         if($user == null) {
-            return response()->json(["message" => "There is no registered user with this email."], 422);
+            return response()->json(["message" => "We can't find a user with that email address."], 422);
         }
         $user->notify(new ResetPasswordOtpNotification());
         return response()->json(["message" => "Requested successfully. Check your email for the verification code."], 200);

@@ -33,7 +33,7 @@ class CitationController extends Controller
 
     public function getAllCitationByEnforcer($id)
     {
-        $citation = CitationInfo::where('user_id', $id)->with('violator', 'enforcer', 'license', 'vehicle')->orderBy('created_at','desc')->distinct()->get();
+        $citation = CitationInfo::where('user_id', $id)->with('violator', 'enforcer', 'license', 'vehicle', 'invoice')->orderBy('created_at','desc')->distinct()->get();
         
         foreach($citation as $row)
         {
@@ -259,7 +259,7 @@ class CitationController extends Controller
             'street' => $request['street'],
         ]);
 
-        $invoice = Invoice::where('id', $id)->update([
+        $invoice = Invoice::where('citation_id', $id)->update([
             'citation_id' => $id,
             'date' => $request['date_of_violation'],
             'violations' => $request['violations'],

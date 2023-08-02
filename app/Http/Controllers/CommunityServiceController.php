@@ -78,7 +78,7 @@ class CommunityServiceController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+ * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -95,11 +95,11 @@ class CommunityServiceController extends Controller
         ]);
 
         $communityService = CommunityService::where('id', $id)->first();
-        if($communityService->citation_id != $request['citation_id']) {
-            Invoice::where('id', $communityService->invoice_id)->update([
-                'status' => 'unpaid',
-            ]);
-        }
+        // if($communityService->citation_id != $request['citation_id']) {
+        //     Invoice::where('id', $communityService->invoice_id)->update([
+        //         'status' => 'processed',
+        //     ]);
+        // }
 
         if($request['status'] === 'settled') {
             $service_details = CommunityServiceDetails::where('id', $request['community_service_details_id'])->first();
