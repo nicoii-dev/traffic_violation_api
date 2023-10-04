@@ -18,7 +18,23 @@ return new class extends Migration
             $table->string('category_name');
             $table->timestamps();
         });
-    }
+
+        // Insert some stuff
+        DB::table('violation_categories')->insert(
+            array(
+                    'id' => '1',
+                    'category_name' => 'Person',
+            ),
+        );
+
+        // Insert some stuff
+        DB::table('violation_categories')->insert(
+            array(
+                    'id' => '2',
+                    'category_name' => 'Vehicle',
+            ),
+        );
+}
 
     /**
      * Reverse the migrations.

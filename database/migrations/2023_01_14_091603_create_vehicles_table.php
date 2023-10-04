@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('color')->nullable();
             $table->string('class')->nullable();
             $table->string('body_markings')->nullable();
-            $table->string('registered_owner');
-            $table->string('owner_address');
-            $table->string('vehicle_status');
+            $table->string('registered_owner')->nullable();
+            $table->string('owner_address')->nullable();
+            $table->string('vehicle_status')->nullable();
             $table->timestamps();
         });
     }

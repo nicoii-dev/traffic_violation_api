@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('license_infos', function (Blueprint $table) {
             $table->id();
             $table->string('violator_id');
-            $table->string('license_number')->unique();
-            $table->string('license_type');
-            $table->string('license_status');
+            $table->string('license_number')->unique()->nullable();
+            $table->string('license_type')->nullable();
+            $table->string('license_status')->nullable();
             $table->timestamps();
         });
     }
