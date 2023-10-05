@@ -138,7 +138,7 @@ class ReportsController extends Controller
             'dateEnd' => 'nullable',
         ]);
        if($request['mode'] == 'yearly') {
-        $paymentRecordsYearly = PaymentRecord::where('id', $id)->with('invoice')->get();
+        $paymentRecordsYearly = PaymentRecord::where('user_id', $id)->with('invoice')->get();
         $breakdown = [];
             for($i = $request['yearStart']; $i <= $request['yearEnd']; $i++){
                 $overall_total = 0;
@@ -153,7 +153,7 @@ class ReportsController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $yearly_report], 200);
 
         } else if($request['mode'] == 'quarterly') {
-            $paymentRecordsQuarterly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('id', $id)->with('invoice')->get();
+            $paymentRecordsQuarterly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
             $quarterly_report = array();
             $breakdown = [];
             for($i = 1; $i <= 4; $i++){	
@@ -214,7 +214,7 @@ class ReportsController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $quarterly_report], 200);
             
        } else if($request['mode'] == 'monthly') {
-        $paymentRecordsMonthly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('id', $id)->with('invoice')->get();
+        $paymentRecordsMonthly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
         $breakdown = [];
         for($i = $request['monthStart']; $i <= $request['monthEnd']; $i++){
             $overall_total = 0;
