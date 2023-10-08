@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('license_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('violator_id');
+            $table->foreignId('violator_id')->unsigned()->nullable()->onDelete('set null');
             $table->string('license_number')->unique()->nullable();
             $table->string('license_type')->nullable();
             $table->string('license_status')->nullable();

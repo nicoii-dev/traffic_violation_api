@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('community_services', function (Blueprint $table) {
             $table->id();
-            $table->string('citation_id');
-            $table->string('invoice_id');
-            $table->string('community_service_details_id');
+            $table->foreignId('citation_id')->unsigned()->nullable()->onDelete('set null');
+            $table->foreignId('invoice_id')->unsigned()->nullable()->onDelete('set null');
+            $table->foreignId('community_service_details_id')->unsigned()->nullable()->onDelete('set null');
             $table->string('rendered_time');
             $table->string('status');
             $table->timestamps();

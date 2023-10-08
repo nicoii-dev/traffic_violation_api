@@ -16,10 +16,10 @@ return new class extends Migration
     {
         Schema::create('citation_infos', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
-            $table->string('violator_id');
-            $table->string('license_id');
-            $table->string('vehicle_id');
+            $table->foreignId('user_id')->unsigned()->nullable()->onDelete('set null');
+            $table->foreignId('violator_id')->unsigned()->nullable()->onDelete('set null');
+            $table->foreignId('license_id')->unsigned()->nullable()->onDelete('set null');
+            $table->foreignId('vehicle_id')->unsigned()->nullable()->onDelete('set null');
             $table->string('violations');
             $table->date('date_of_violation');
             $table->string('time_of_violation');

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('citation_id');
+            $table->foreignId('citation_id')->unsigned()->nullable()->onDelete('set null');
             $table->date('date');
             $table->string('violations');
             $table->decimal('sub_total', 8, 2);

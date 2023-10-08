@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('payment_records', function (Blueprint $table) {
             $table->id();
-            $table->string('invoice_id');
-            $table->string('user_id');
+            $table->foreignId('invoice_id')->unsigned()->nullable()->onDelete('set null');
+            $table->foreignId('user_id')->unsigned()->nullable()->onDelete('set null');
             $table->date('payment_date');
             $table->string('payment_method');
             $table->string('total_paid');
