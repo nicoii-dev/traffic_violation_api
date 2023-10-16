@@ -17,6 +17,9 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\ReportsViolationController;
+use App\Http\Controllers\MakeController;
+use App\Http\Controllers\ClassController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -109,8 +112,21 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::put('/community-service-types/update/{id}', [CommunityServiceDetailsController::class, 'update']);
     Route::post('/community-service-types/delete/{id}', [CommunityServiceDetailsController::class, 'store']);
 
+    Route::get('/make', [MakeController::class, 'index']);
+    Route::post('/make/create', [MakeController::class, 'store']);
+    Route::post('/make/view/{id}', [MakeController::class, 'show']);
+    Route::put('/make/update/{id}', [MakeController::class, 'update']);
+    Route::post('/make/delete/{id}', [MakeController::class, 'destroy']);
+
+    Route::get('/class', [ClassController::class, 'index']);
+    Route::post('/class/create', [ClassController::class, 'store']);
+    Route::post('/class/view/{id}', [ClassController::class, 'show']);
+    Route::put('/class/update/{id}', [ClassController::class, 'update']);
+    Route::post('/class/delete/{id}', [ClassController::class, 'destroy']);
+
     Route::post('/dashboard', [DashboardController::class, 'index']);
 
     Route::post('/reports/income', [ReportsController::class, 'incomeReport']);
     Route::post('/reports/income/{id}', [ReportsController::class, 'incomeReportByUser']);
+    Route::post('/reports/violation/{id}', [ReportsViolationController::class, 'violationReport']);
 });

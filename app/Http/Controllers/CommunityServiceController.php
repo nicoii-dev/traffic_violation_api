@@ -49,10 +49,11 @@ class CommunityServiceController extends Controller
         if($request['status'] === 'settled') {
             $service_details = CommunityServiceDetails::where('id', $request['community_service_details_id'])->first();
             $invoice = Invoice::where('id', $request['invoice_id'])->first();
-            $discount = $service_details->discount / 100;
-            $total = $invoice->total_amount - ($discount * $invoice->total_amount);
+            // $discount = $service_details->discount / 100;
+            // $total = $invoice->total_amount - ($discount * $invoice->total_amount);
+            $total = $invoice->total_amount - 500;
             Invoice::where('id', $request['invoice_id'])->update([
-                'discount' => $service_details->discount,
+                // 'discount' => $service_details->discount,
                 'total_amount' => $total
             ]);
         }
@@ -104,10 +105,11 @@ class CommunityServiceController extends Controller
         if($request['status'] === 'settled') {
             $service_details = CommunityServiceDetails::where('id', $request['community_service_details_id'])->first();
             $invoice = Invoice::where('id', $request['invoice_id'])->first();
-            $discount = $service_details->discount / 100;
-            $total = $invoice->total_amount - ($discount * $invoice->total_amount);
+            // $discount = $service_details->discount / 100;
+            // $total = $invoice->total_amount - ($discount * $invoice->total_amount);
+            $total = $invoice->total_amount - 500;
             Invoice::where('id', $request['invoice_id'])->update([
-                'discount' => $service_details->discount,
+                // 'discount' => $service_details->discount,
                 'total_amount' => $total
             ]);
         }

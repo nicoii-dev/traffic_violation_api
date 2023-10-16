@@ -49,7 +49,7 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        $invoice = Invoice::find($id)->with('violator')->first();
+        $invoice = Invoice::find($id)->with('citation.violator')->first();
         $violationList = ViolationList::whereIn('id', json_decode($invoice->violations))->with('category')->get();
         $invoice->violations = $violationList;
         return response()->json($invoice, 200);
