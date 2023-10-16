@@ -22,6 +22,17 @@ return new class extends Migration
             $table->longText('description');
             $table->timestamps();
         });
+
+        // Insert some stuff
+        DB::table('violation_lists')->insert(
+            array(
+                    'id' => '1',
+                    'violation_categories_id' => '1',
+                    'violation_name' => 'No helmet',
+                    'penalty' => '1000',
+                    'description' => 'No helmet violation',
+            ),
+        );
     }
 
     /**

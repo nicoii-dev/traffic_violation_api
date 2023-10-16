@@ -20,6 +20,7 @@ class CitationInfo extends Model
         'license_id',
         'vehicle_id',
         'violations',
+        'tct',
         'date_of_violation',
         'time_of_violation',
         'municipality',

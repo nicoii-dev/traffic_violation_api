@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('license_id')->unsigned()->nullable()->onDelete('set null');
             $table->foreignId('vehicle_id')->unsigned()->nullable()->onDelete('set null');
             $table->string('violations');
-            $table->string('tct');
+            $table->string('tct')->nullable();
             $table->date('date_of_violation');
             $table->string('time_of_violation');
             $table->string('municipality');
