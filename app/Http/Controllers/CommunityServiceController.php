@@ -54,6 +54,7 @@ class CommunityServiceController extends Controller
             $total = $invoice->total_amount - 500;
             Invoice::where('id', $request['invoice_id'])->update([
                 // 'discount' => $service_details->discount,
+                'discount' => 500,
                 'total_amount' => $total
             ]);
         }
