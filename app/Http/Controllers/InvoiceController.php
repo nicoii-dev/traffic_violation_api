@@ -15,7 +15,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::with('citation.violator')->get();
+        $invoices = Invoice::with('citation.violator')->with('citation')->get();
         foreach($invoices as &$row)
         {
             $violationList = ViolationList::whereIn('id', json_decode($row->violations))->with('category')->get();

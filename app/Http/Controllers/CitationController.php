@@ -92,7 +92,7 @@ class CitationController extends Controller
             // 'license_number' => 'required|string|unique:license_infos,license_number',
             'license_type' => 'required',
             'license_status' => 'required',
-            'plate_number' => 'required|string|unique:vehicles,plate_number',
+            // 'plate_number' => 'required|string|unique:vehicles,plate_number',
             'make' => 'required',
             'model' => 'required',
             'color' => 'required',
