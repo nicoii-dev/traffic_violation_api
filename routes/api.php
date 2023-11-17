@@ -39,8 +39,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::post('/forgot-password', [ForgotPasswordController::class, 'forgotPassword'])->middleware('guest')->name('password.email');
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->middleware('guest')->name('password.reset');
-Route::post('/forgot-password-otp', [ForgotPasswordController::class, 'forgotPasswordOtp'])->middleware('guest')->name('password.email');
-Route::post('/reset-password-otp', [ForgotPasswordController::class, 'resetPasswordOtp'])->middleware('guest')->name('password.reset');
+// Route::post('/forgot-password-otp', [ForgotPasswordController::class, 'forgotPasswordOtp'])->middleware('guest')->name('password.email');
+// Route::post('/reset-password-otp', [ForgotPasswordController::class, 'resetPasswordOtp'])->middleware('guest')->name('password.reset');
     //for authenticated
 Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/change-password', [AuthController::class, 'changePassword']);
@@ -128,5 +128,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('/reports/income', [ReportsController::class, 'incomeReport']);
     Route::post('/reports/income/{id}', [ReportsController::class, 'incomeReportByUser']);
-    Route::post('/reports/violation/{id}', [ReportsViolationController::class, 'violationReport']);
+    Route::post('/reports/violation', [ReportsViolationController::class, 'violationReport']);
+    Route::post('/reports/violation/{id}', [ReportsViolationController::class, 'violationReportByUser']);
+    Route::post('/reports/top', [ReportsViolationController::class, 'showMostCommittedViolation']);
 });
