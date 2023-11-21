@@ -17,6 +17,13 @@ class ViolationListController extends Controller
         return ViolationList::with('category')->get();
     }
 
+    public function search(Request $request)
+    {
+        $search = $request['search'];
+        $violation = ViolationList::where('violation_name', 'like', "%{$search}%")->get();
+        return response()->json($violation, 200);
+    }
+
     public function getByCategory($id)
     {
         return DB::table('violation_lists')

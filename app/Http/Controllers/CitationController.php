@@ -171,6 +171,7 @@ class CitationController extends Controller
             'discount' => 0,
             'total_amount' => $request['sub_total'],
             'status' => 'unpaid',
+            'expired' => 'no'
         ]);
 
         $citation = CitationInfo::with('violator', 'enforcer', 'license', 'vehicle')->get();

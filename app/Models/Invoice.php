@@ -17,7 +17,8 @@ class Invoice extends Model
         'sub_total',
         'discount',
         'total_amount',
-        'status'
+        'status',
+        'expired'
     ];
 
     public function citation()

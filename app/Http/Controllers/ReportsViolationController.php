@@ -315,18 +315,20 @@ class ReportsViolationController extends Controller
                                 };
                             }
                         }
-                        if(count($topViolation) > 0) {
-                            if(array_values($topViolation)[0]["total"] < $overall_total) {
-                                unset($topViolation);
-                                array_push($topViolation, ['year' => $i, 'name' => $violation["violation_name"], 'total' => $overall_total]);
-                            } else if (array_values($topViolation)[0]["total"] == $overall_total) {
-                                array_push($topViolation, ['year' => $i, 'name' => $violation["violation_name"], 'total' => $overall_total]);
+                        if($overall_total > 0) {
+                            if(count($topViolation) > 0) {
+                                if(array_values($topViolation)[0]["total"] < $overall_total) {
+                                    unset($topViolation);
+                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                } else if (array_values($topViolation)[0]["total"] == $overall_total) {
+                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                }
+                            } else {
+                                array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
                             }
-                        } else {
-                            array_push($topViolation, ['year' => $i, 'name' => $violation["violation_name"], 'total' => $overall_total]);
                         }
                     }	
-                    $per_year_top_violation[] = array("value" => $topViolation);	
+                    $per_year_top_violation[] = ['name' => $i, 'violation' => $topViolation];	
                 }
                 return response()->json(["data" => $per_year_top_violation], 200);
         } else if($request['mode'] == 'quarterly') {
@@ -362,10 +364,12 @@ class ReportsViolationController extends Controller
                                 }
                             }
                         }
-                        $per_quarter_top_violation[] = array("violation" => $topViolation);
+                        if($overall_total > 0) {
+                            $per_quarter_top_violation = $topViolation;
+                        }
                     }
                     //echo "₱"; echo$overall_total; echo '<br>';	
-                    $quarterly_report[] = array("quarter"=>"1", "value"=>$per_quarter_top_violation);
+                    $quarterly_report[] = array("name"=>"Quarter 1", "violation" => $per_quarter_top_violation);
                 }
                 else if($i == 2){
                     $per_quarter_top_violation = array();
@@ -395,9 +399,11 @@ class ReportsViolationController extends Controller
                                 }
                             }
                         }
-                        $per_quarter_top_violation[] = array("violation" => $topViolation);
+                        if($overall_total > 0) {
+                            $per_quarter_top_violation = $topViolation;
+                        }
                     }
-                    $quarterly_report[] = array("quarter"=>"2", "value"=>$per_quarter_top_violation);							
+                    $quarterly_report[] = array("name"=>"Quarter 2", "violation" => $per_quarter_top_violation);							
                 }else if($i == 3){
                     $per_quarter_top_violation = array();
                     for($a=7; $a <=9; $a++){
@@ -426,9 +432,11 @@ class ReportsViolationController extends Controller
                                 }
                             }
                         }
-                        $per_quarter_top_violation[] = array("violation" => $topViolation);
+                        if($overall_total > 0) {
+                            $per_quarter_top_violation = $topViolation;
+                        }
                     }
-                    $quarterly_report[] = array("quarter"=>"3", "value"=>$per_quarter_top_violation);									
+                    $quarterly_report[] = array("name"=>"Quarter 3", "violation" => $per_quarter_top_violation);									
                 }else if($i == 4){
                     $per_quarter_top_violation = array();
                     for($a=10; $a <=12; $a++){
@@ -457,9 +465,11 @@ class ReportsViolationController extends Controller
                                 }
                             }
                         }
-                        $per_quarter_top_violation[] = array("violation" => $topViolation);
+                        if($overall_total > 0) {
+                            $per_quarter_top_violation = $topViolation;
+                        }
                     }
-                    $quarterly_report[] = array("quarter"=>"4", "value"=>$per_quarter_top_violation);												
+                    $quarterly_report[] = array("name"=>"Quarter 4", "violation" => $per_quarter_top_violation);												
                 }				
             }	
                 return response()->json(["data" => $quarterly_report], 200); 
@@ -493,7 +503,7 @@ class ReportsViolationController extends Controller
                             }
                         }
                     }	
-                    $per_year_top_violation[] = array("month" => date('F', mktime(0, 0, 0, $i, 10)), "value" => $topViolation);	
+                    $per_year_top_violation[] = array("name" => date('F', mktime(0, 0, 0, $i, 10)), "violation" => $topViolation);	
                 }
                 return response()->json(["data" => $per_year_top_violation], 200);
         }

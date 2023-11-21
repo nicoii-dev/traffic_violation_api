@@ -60,6 +60,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/delete-category/{id}', [ViolationCategoriesController::class, 'destroy']);
 
     Route::get('/violation', [ViolationListController::class, 'index']);
+    Route::post('/violation/search', [ViolationListController::class, 'search']);
     Route::post('/violation/{id}', [ViolationListController::class, 'getByCategory']);
     Route::post('/create-violation', [ViolationListController::class, 'store']);
     Route::post('/view-violation/{id}', [ViolationListController::class, 'show']);
