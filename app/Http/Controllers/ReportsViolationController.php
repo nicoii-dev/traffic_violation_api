@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 use App\Models\ViolationList;
 use App\Models\CitationInfo;
 use Illuminate\Http\Request;
@@ -47,7 +48,8 @@ class ReportsViolationController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $yearly_report, "violation" => $violation], 200);
 
         } else if($request['mode'] == 'quarterly') {
-            $paymentRecordsQuarterly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->with('invoice')->get();
+            $paymentRecordsQuarterly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->with('invoice')->get();
+            $violation = ViolationList::where('id', $request['violation_id'])->first();
             $quarterly_report = array();
             $breakdown = [];
             for($i = 1; $i <= 4; $i++){	
@@ -71,6 +73,7 @@ class ReportsViolationController extends Controller
                     $quarterly_report[] = array("quarter"=>"1", "value"=>$overall_total);
                 }else if($i == 2){
                     $overall_total = 0;
+                    $violation = ViolationList::where('id', $request['violation_id'])->first();
                     for($b=4; $b <=6; $b++){
                         foreach($paymentRecordsQuarterly as $result) {
                             if(date("m", strtotime($result['payment_date'])) == $b){
@@ -125,7 +128,8 @@ class ReportsViolationController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $quarterly_report], 200);
             
        } else if($request['mode'] == 'monthly') {
-        $paymentRecordsMonthly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->get();
+        $paymentRecordsMonthly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->get();
+        $violation = ViolationList::where('id', $request['violation_id'])->first();
         $breakdown = [];
         for($i = $request['monthStart']; $i <= $request['monthEnd']; $i++){
             $overall_total = 0;
@@ -167,6 +171,7 @@ class ReportsViolationController extends Controller
         ]);
        if($request['mode'] == 'yearly') {
         $paymentRecordsYearly = PaymentRecord::where('user_id', $id)->with('invoice')->get();
+        $violation = ViolationList::where('id', $request['violation_id'])->first();
         $breakdown = [];
             for($i = $request['yearStart']; $i <= $request['yearEnd']; $i++){
                 $overall_total = 0;
@@ -185,7 +190,8 @@ class ReportsViolationController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $yearly_report], 200);
 
         } else if($request['mode'] == 'quarterly') {
-            $paymentRecordsQuarterly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
+            $violation = ViolationList::where('id', $request['violation_id'])->first();
+            $paymentRecordsQuarterly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
             $quarterly_report = array();
             $breakdown = [];
             for($i = 1; $i <= 4; $i++){	
@@ -262,7 +268,8 @@ class ReportsViolationController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $quarterly_report], 200);
             
        } else if($request['mode'] == 'monthly') {
-        $paymentRecordsMonthly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
+        $paymentRecordsMonthly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
+        $violation = ViolationList::where('id', $request['violation_id'])->first();
         $breakdown = [];
         for($i = $request['monthStart']; $i <= $request['monthEnd']; $i++){
             $overall_total = 0;
@@ -333,7 +340,7 @@ class ReportsViolationController extends Controller
                 return response()->json(["data" => $per_year_top_violation], 200);
         } else if($request['mode'] == 'quarterly') {
             $quarterly_report = array();
-            $citations = CitationInfo::where(\DB::raw('YEAR(date_of_violation)'), '=', $request['year'] )->get();
+            $citations = CitationInfo::where(DB::raw('YEAR(date_of_violation)'), '=', $request['year'] )->get();
             $violations = ViolationList::get();
             for($i = 1; $i <= 4; $i++){	
                 $per_quarter_top_violation = array();
@@ -474,7 +481,7 @@ class ReportsViolationController extends Controller
             }	
                 return response()->json(["data" => $quarterly_report], 200); 
         } else if($request['mode'] == 'monthly') { 
-            $citations = CitationInfo::where(\DB::raw('YEAR(date_of_violation)'), '=', $request['year'] )->get();
+            $citations = CitationInfo::where(DB::raw('YEAR(date_of_violation)'), '=', $request['year'] )->get();
             $violations = ViolationList::get();
             $per_year_top_violation = array();
                 for($i = $request['monthStart']; $i <= $request['monthEnd']; $i++){

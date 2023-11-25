@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\PaymentRecord;
-
+use App\Models\Invoice;
+use App\Models\ViolationList;
 class ReportsController extends Controller
 {
     /**
@@ -40,7 +42,7 @@ class ReportsController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $yearly_report], 200);
 
         } else if($request['mode'] == 'quarterly') {
-            $paymentRecordsQuarterly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->with('invoice')->get();
+            $paymentRecordsQuarterly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->with('invoice')->get();
             $quarterly_report = array();
             $breakdown = [];
             for($i = 1; $i <= 4; $i++){	
@@ -101,7 +103,7 @@ class ReportsController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $quarterly_report], 200);
             
        } else if($request['mode'] == 'monthly') {
-        $paymentRecordsMonthly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->get();
+        $paymentRecordsMonthly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->with('invoice')->get();
         $breakdown = [];
         for($i = $request['monthStart']; $i <= $request['monthEnd']; $i++){
             $overall_total = 0;
@@ -153,7 +155,7 @@ class ReportsController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $yearly_report], 200);
 
         } else if($request['mode'] == 'quarterly') {
-            $paymentRecordsQuarterly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
+            $paymentRecordsQuarterly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
             $quarterly_report = array();
             $breakdown = [];
             for($i = 1; $i <= 4; $i++){	
@@ -214,7 +216,7 @@ class ReportsController extends Controller
             return response()->json(["breakdown" => $breakdown, "data" => $quarterly_report], 200);
             
        } else if($request['mode'] == 'monthly') {
-        $paymentRecordsMonthly = PaymentRecord::where(\DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
+        $paymentRecordsMonthly = PaymentRecord::where(DB::raw('YEAR(payment_date)'), '=', $request['year'] )->where('user_id', $id)->with('invoice')->get();
         $breakdown = [];
         for($i = $request['monthStart']; $i <= $request['monthEnd']; $i++){
             $overall_total = 0;
@@ -232,12 +234,36 @@ class ReportsController extends Controller
        return response()->json(["message" => "invalid request"], 200);
     }
 
+    public function showUnsettled(Request $request)
+    {
+        $request->validate([
+            'dateStart' => 'required',
+            'dateEnd' => 'required',
+        ]);
+
+        $citation = Invoice::whereBetween('date', [$request['dateStart'], $request['dateEnd']])
+            ->where('status', 'unpaid')
+            ->where('expired', 'yes')
+            ->with('citation.violator')
+            ->with('citation.license')
+            ->with('citation.vehicle')
+            ->get();
+            foreach($citation as &$row)
+            {
+                $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
+                $row['violations'] = $violationList;
+            }
+            return response()->json(["data" => $citation], 200);
+    }
+
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    
     public function show($id)
     {
         //

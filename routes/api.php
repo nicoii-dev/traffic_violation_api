@@ -132,4 +132,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/reports/violation', [ReportsViolationController::class, 'violationReport']);
     Route::post('/reports/violation/{id}', [ReportsViolationController::class, 'violationReportByUser']);
     Route::post('/reports/top', [ReportsViolationController::class, 'showMostCommittedViolation']);
+    Route::post('/reports/unsettled', [ReportsController::class, 'showUnsettled']);
 });

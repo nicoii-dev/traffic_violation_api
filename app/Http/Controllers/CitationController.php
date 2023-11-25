@@ -26,7 +26,7 @@ class CitationController extends Controller
         foreach($citation as &$row)
         {
             $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
-            $row->violations = $violationList;
+            $row['violations'] = $violationList;
         }
         return response()->json($citation, 200);
     }
@@ -179,7 +179,7 @@ class CitationController extends Controller
         foreach($citation as &$row)
         {
             $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
-            $row->violations = $violationList;
+            $row['violations'] = $violationList;
         }
 
         return response()->json($citation, 200);
@@ -214,7 +214,10 @@ class CitationController extends Controller
             'middle_name' => 'required',
             'last_name' => 'required',
             'gender' => 'required',
-            'address' => 'required',
+            'violatorMunicipality' => 'required',
+            'violatorZipcode' => 'required',
+            'violatorBarangay' => 'required',
+            'violatorStreet' => 'required',
             'nationality' => 'required',
             'phone_number' => 'required',
             'dob' => 'required',
@@ -247,7 +250,10 @@ class CitationController extends Controller
             $request['middle_name'],
             $request['last_name'],
             $request['gender'],
-            $request['address'],
+            $request['violatorMunicipality'],
+            $request['violatorZipcode'],
+            $request['violatorBarangay'],
+            $request['violatorStreet'],
             $request['nationality'],
             $request['phone_number'],
             $request['dob'],
