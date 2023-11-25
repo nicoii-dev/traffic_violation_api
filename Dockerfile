@@ -1,4 +1,4 @@
-FROM php:8.1-apache
+FROM php:8.0.2-apache
 
 # Arguments defined in docker-compose.yml
 ARG user
