@@ -152,7 +152,7 @@ class CitationController extends Controller
             'user_id' => Auth::user()->id,
             'violator_id' => $violator->id,
             'license_id' => $license->id,
-            'vehicle_id' => $license->id,
+            'vehicle_id' => $vehicle->id,
             'violations' => $request['violations'],
             'tct' => $request['tct'],
             'date_of_violation' => $request['date_of_violation'],
