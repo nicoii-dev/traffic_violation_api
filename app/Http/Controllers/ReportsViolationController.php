@@ -326,18 +326,18 @@ class ReportsViolationController extends Controller
                             if(count($topViolation) > 0) {
                                 if(array_values($topViolation)[0]["total"] < $overall_total) {
                                     unset($topViolation);
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 } else if (array_values($topViolation)[0]["total"] == $overall_total) {
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 }
                             } else {
-                                array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                             }
                         }
                     }	
                     $per_year_top_violation[] = ['name' => $i, 'violation' => $topViolation];	
                 }
-                return response()->json(["data" => $per_year_top_violation], 200);
+                return response()->json(["data" => $topViolation], 200);
         } else if($request['mode'] == 'quarterly') {
             $quarterly_report = array();
             $citations = CitationInfo::where(DB::raw('YEAR(date_of_violation)'), '=', $request['year'] )->get();
@@ -362,12 +362,12 @@ class ReportsViolationController extends Controller
                                 if(count($topViolation) > 0) {
                                     if(array_values($topViolation)[0]["total"] < $overall_total) {
                                         unset($topViolation);
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     } else if (array_values($topViolation)[0]["total"] == $overall_total) {
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     }
                                 } else {
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 }
                             }
                         }
@@ -397,12 +397,12 @@ class ReportsViolationController extends Controller
                                 if(count($topViolation) > 0) {
                                     if(array_values($topViolation)[0]["total"] < $overall_total) {
                                         unset($topViolation);
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     } else if (array_values($topViolation)[0]["total"] == $overall_total) {
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     }
                                 } else {
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 }
                             }
                         }
@@ -430,12 +430,12 @@ class ReportsViolationController extends Controller
                                 if(count($topViolation) > 0) {
                                     if(array_values($topViolation)[0]["total"] < $overall_total) {
                                         unset($topViolation);
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     } else if (array_values($topViolation)[0]["total"] == $overall_total) {
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     }
                                 } else {
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 }
                             }
                         }
@@ -463,12 +463,12 @@ class ReportsViolationController extends Controller
                                 if(count($topViolation) > 0) {
                                     if(array_values($topViolation)[0]["total"] < $overall_total) {
                                         unset($topViolation);
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     } else if (array_values($topViolation)[0]["total"] == $overall_total) {
-                                        array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                        $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                     }
                                 } else {
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 }
                             }
                         }
@@ -501,12 +501,12 @@ class ReportsViolationController extends Controller
                             if(count($topViolation) > 0) {
                                 if(array_values($topViolation)[0]["total"] < $overall_total) {
                                     unset($topViolation);
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 } else if (array_values($topViolation)[0]["total"] == $overall_total) {
-                                    array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                    $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                                 }
                             } else {
-                                array_push($topViolation, ['name' => $violation["violation_name"], 'total' => $overall_total]);
+                                $topViolation[] = ['name' => $violation["violation_name"], 'total' => $overall_total];
                             }
                         }
                     }	
