@@ -128,25 +128,32 @@ class CitationController extends Controller
             $request['dob'],
         );
 
-        $license = LicenseInfo::create([
-            'violator_id' => $violator->id,
-            'license_number' => $request['license_number'],
-            'license_type' => $request['license_type'],
-            'license_status' => $request['license_status'],
-        ]);
+        $vehicle = $this->CheckVehicle(
+            $violator->id,
+            $request['plate_number'],
+            $request['make'],
+            $request['model'],
+            $request['color'],
+            $request['class'],
+            $request['body_markings'],
+            $request['registered_owner'],
+            $request['owner_address'],
+            $request['vehicle_status'],
+        );
 
-        $vehicle = Vehicle::create([
-            'violator_id' => $violator->id,
-            'plate_number' => $request['plate_number'],
-            'make' => $request['make'],
-            'model' => $request['model'],
-            'color' => $request['color'],
-            'class' => $request['class'],
-            'body_markings' => $request['body_markings'],
-            'registered_owner' => $request['registered_owner'],
-            'owner_address' => $request['owner_address'],
-            'vehicle_status' => $request['vehicle_status'],
-        ]);
+        $old_license = LicenseInfo::where('license_number', $request['license_number'])
+        ->where('violator_id', '!=', $violator->id)
+        ->first();
+        if($old_license != null) {
+            return response()->json(['message' => 'License number is already taken'], 422);
+        };
+        $license = $this->CheckLicense(
+            $violator->id,
+            $request['license_number'],
+            $request['license_type'],
+            $request['license_status'],
+        );
+
 
         $citation = CitationInfo::create([
             'user_id' => Auth::user()->id,
@@ -378,6 +385,71 @@ class CitationController extends Controller
                     'dob' => $dob,
                 ]);
                 return $violator;
+            }
+
+    }
+
+    private function CheckVehicle(
+        $violator_id,
+        $plate_number,
+        $make,
+        $model,
+        $color,
+        $class,
+        $body_markings,
+        $registered_owner,
+        $owner_address,
+        $vehicle_status
+        )
+    {
+        $vehicleData = Vehicle::where('violator_id', $violator_id)
+            ->where('plate_number', $plate_number)
+            ->where('make', $make)
+            ->where('model', $model)
+            ->where('color', $color)
+            ->first();
+
+            if($vehicleData != null) {
+                return $vehicleData;
+            } else {
+                $newVehicle = Vehicle::create([
+                    'violator_id' => $violator_id,
+                    'plate_number' => $plate_number,
+                    'make' => $make,
+                    'model' => $model,
+                    'color' => $color,
+                    'class' => $class,
+                    'body_markings' => $body_markings,
+                    'registered_owner' => $registered_owner,
+                    'owner_address' => $owner_address,
+                    'vehicle_status' => $vehicle_status,
+                ]);
+                return $newVehicle ;
+            }
+
+    }
+
+    private function CheckLicense(
+        $violator_id,
+        $license_number,
+        $license_type,
+        $license_status,
+        )
+    {
+        $licenseData = LicenseInfo::where('violator_id', $violator_id)
+            ->where('license_number', $license_number)
+            ->first();
+
+            if($licenseData != null) {
+                return $licenseData;
+            } else {
+                $newLicense = LicenseInfo::create([
+                    'violator_id' => $violator_id,
+                    'license_number' => $license_number,
+                    'license_type' => $license_type,
+                    'license_status' => $license_status,
+                ]);
+                return $newLicense;
             }
 
     }

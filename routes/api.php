@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/delete-violation/{id}', [ViolationListController::class, 'destroy']);
 
     Route::get('/violator', [ViolatorController::class, 'index']);
-    Route::post('/search', [ViolatorController::class, 'searchViolator']);
+    Route::post('/violator/search', [ViolatorController::class, 'search']);
     Route::post('/create-violator', [ViolatorController::class, 'store']);
     Route::post('/view-violator/{id}', [ViolatorController::class, 'show']);
     Route::put('/update-violator/{id}', [ViolatorController::class, 'update']);

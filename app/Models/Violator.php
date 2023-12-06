@@ -32,7 +32,7 @@ class Violator extends Model
     }
 
     public function vehicle() {
-        return $this->hasOne(Vehicle::class, 'violator_id', 'id');
+        return $this->hasMany(Vehicle::class, 'violator_id', 'id');
     }
 
     // public function citation() {

@@ -22,7 +22,8 @@ class ViolatorController extends Controller
     public function index()
     {
         
-        return Violator::all();
+        $violator = Violator::with('license')->with('vehicle')->get();
+        return response()->json($violator, 200);
     }
 
     public function searchViolator(Request $request)
@@ -43,6 +44,13 @@ class ViolatorController extends Controller
                 return [];
             }
 
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request['search'];
+        $violation = Violator::where('last_name', 'like', "%{$search}%")->with('license')->with('vehicle')->get();
+        return response()->json($violation, 200);
     }
 
     /**
