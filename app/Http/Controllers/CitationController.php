@@ -140,13 +140,15 @@ class CitationController extends Controller
             $request['owner_address'],
             $request['vehicle_status'],
         );
+        if($request['license_number'] != null || $request['license_number'] != 'N/A') {
+            $old_license = LicenseInfo::where('license_number', $request['license_number'])
+            ->where('violator_id', '!=', $violator->id)
+            ->first();
+            if($old_license != null) {
+                return response()->json(['message' => 'License number is already taken'], 422);
+            };
+        }
 
-        $old_license = LicenseInfo::where('license_number', $request['license_number'])
-        ->where('violator_id', '!=', $violator->id)
-        ->first();
-        if($old_license != null) {
-            return response()->json(['message' => 'License number is already taken'], 422);
-        };
         $license = $this->CheckLicense(
             $violator->id,
             $request['license_number'],
@@ -170,7 +172,7 @@ class CitationController extends Controller
             'street' => $request['street'],
         ]);
 
-        $invoice = Invoice::create([
+        Invoice::create([
             'citation_id' => $citation->id,
             'date' => $request['date_of_violation'],
             'violations' => $request['violations'],
