@@ -140,7 +140,7 @@ class CitationController extends Controller
             $request['owner_address'],
             $request['vehicle_status'],
         );
-        if($request['license_number'] != null || $request['license_number'] != 'N/A') {
+        if($request['license_number'] != null && $request['license_type'] != 'N/A') {
             $old_license = LicenseInfo::where('license_number', $request['license_number'])
             ->where('violator_id', '!=', $violator->id)
             ->first();
