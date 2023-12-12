@@ -183,15 +183,15 @@ class CitationController extends Controller
             'expired' => 'no'
         ]);
 
-        $citation = CitationInfo::with('violator', 'enforcer', 'license', 'vehicle')->get();
+        // $citation = CitationInfo::with('violator', 'enforcer', 'license', 'vehicle')->get();
 
-        foreach($citation as &$row)
-        {
-            $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
-            $row['violations'] = $violationList;
-        }
+        // foreach($citation as $row)
+        // {
+        //     $violationList = ViolationList::whereIn('id', json_decode($row->violations))->get();
+        //     $row['violations'] = $violationList;
+        // }
 
-        return response()->json($citation, 200);
+        return response()->json('Successfully Created', 200);
     }
 
     /**

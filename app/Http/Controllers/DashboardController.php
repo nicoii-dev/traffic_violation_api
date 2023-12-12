@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\CitationInfo;
 use App\Models\User;
@@ -15,7 +15,7 @@ class DashboardController extends Controller
         
         $citation = CitationInfo::all()->count();
         $citationByMonth = CitationInfo::query()
-        ->select(\DB::raw("count(*) as total, DATE_FORMAT(date_of_violation, '%m') as month"))
+        ->select(DB::raw("count(*) as total, DATE_FORMAT(date_of_violation, '%m') as month"))
         ->groupByRaw('MONTHNAME(date_of_violation)')
         ->orderBy('date_of_violation', 'ASC')
         ->get();
